@@ -1,0 +1,132 @@
+<Window x:Class="TODO_APP_WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:TODO_APP_WPF.ViewModels"
+        xmlns:conv="clr-namespace:TODO_APP_WPF.Converters"
+        mc:Ignorable="d"
+        Title="Todo" Height="500" Width="480"
+        ResizeMode="CanMinimize">
+
+    <Window.DataContext>
+        <vm:MainViewModel />
+    </Window.DataContext>
+
+    <Window.Resources>
+        <conv:BoolToStrikethroughConverter x:Key="BoolToStrikethrough" />
+        <Style x:Key="TodoItemStyle" TargetType="ListBoxItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- タイトル -->
+        <TextBlock Grid.Row="0"
+                   Text="Todo"
+                   FontSize="28"
+                   FontWeight="Bold"
+                   Margin="0,0,0,4" />
+
+        <!-- 残り件数 -->
+        <TextBlock Grid.Row="1"
+                   FontSize="14"
+                   Foreground="#666666"
+                   Margin="0,0,0,16">
+            <Run Text="{Binding RemainingCount, Mode=OneWay}" />
+            <Run Text=" 件残っています" />
+        </TextBlock>
+
+        <!-- 入力フォーム -->
+        <Grid Grid.Row="2" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0"
+                     Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}"
+                     FontSize="14"
+                     Padding="8,6"
+                     Margin="0,0,8,0"
+                     VerticalContentAlignment="Center">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Return" Command="{Binding AddCommand}" />
+                </TextBox.InputBindings>
+            </TextBox>
+            <Button Grid.Column="1"
+                    Content="追加"
+                    Command="{Binding AddCommand}"
+                    FontSize="14"
+                    Padding="16,6"
+                    Background="#0078D4"
+                    Foreground="White"
+                    BorderThickness="0"
+                    Cursor="Hand" />
+        </Grid>
+
+        <!-- Todoリスト -->
+        <ListBox Grid.Row="3"
+                 ItemsSource="{Binding Todos}"
+                 ItemContainerStyle="{StaticResource TodoItemStyle}"
+                 BorderThickness="0"
+                 Background="Transparent"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="#E0E0E0"
+                            BorderThickness="0,0,0,1"
+                            Padding="0,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Grid.Column="0"
+                                      IsChecked="{Binding Completed}"
+                                      VerticalAlignment="Center"
+                                      Margin="0,0,10,0" />
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding Text}"
+                                       FontSize="14"
+                                       VerticalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       TextDecorations="{Binding Completed, Converter={StaticResource BoolToStrikethrough}}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Completed}" Value="True">
+                                                <Setter Property="Foreground" Value="#999999" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <Button Grid.Column="2"
+                                    Content="削除"
+                                    Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                    CommandParameter="{Binding Id}"
+                                    FontSize="12"
+                                    Padding="10,4"
+                                    Background="#F44336"
+                                    Foreground="White"
+                                    BorderThickness="0"
+                                    Cursor="Hand"
+                                    Margin="10,0,0,0" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Window>

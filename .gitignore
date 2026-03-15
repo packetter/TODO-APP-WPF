@@ -1,0 +1,19 @@
+# Build outputs
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docview
+
+# NuGet
+*.nupkg
+packages/
+project.lock.json
+
+# OS
+Thumbs.db
+Desktop.ini
