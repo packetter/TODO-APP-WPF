@@ -6,7 +6,7 @@
         xmlns:vm="clr-namespace:TODO_APP_WPF.ViewModels"
         xmlns:conv="clr-namespace:TODO_APP_WPF.Converters"
         mc:Ignorable="d"
-        Title="Todo" Height="500" Width="480"
+        Title="Todoアプリ" Height="500" Width="480"
         ResizeMode="CanMinimize">
 
     <Window.DataContext>
