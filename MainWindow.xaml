@@ -33,7 +33,7 @@
 
         <!-- タイトル -->
         <TextBlock Grid.Row="0"
-                   Text="Todo"
+                   Text="Todoアプリ"
                    FontSize="28"
                    FontWeight="Bold"
                    Margin="0,0,0,4" />
